@@ -10,7 +10,7 @@ def index():
 
 @app.route('/test')
 def test():
-    return "Hello, ceci est un test."
+    return "Hello, ceci est un autre test."
 
 if __name__ == "__main__":
     app.run()

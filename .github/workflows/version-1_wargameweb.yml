@@ -64,4 +64,5 @@ jobs:
         with:
           app-name: 'WarGameWeb'
           slot-name: 'Production'
+          kudu-app-path: site/wwwroot/.
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8A5CA35810BC4ADBA46F8753365375D1 }}

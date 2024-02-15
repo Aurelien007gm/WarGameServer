@@ -65,4 +65,4 @@ jobs:
           app-name: 'WarGameWeb'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8A5CA35810BC4ADBA46F8753365375D1 }}
-          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/WarGameApp'
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/WarGameWeb'

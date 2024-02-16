@@ -5,16 +5,18 @@ from player import Player
 
 # Main instance of a game
 class Game:
-    def __init__(self,bot = True):
+    def __init__(self, players_json):
+        name = [p.get('name') for p in players_json]
+        is_bot = [p.get('bot') for p in players_json]
         self.players = []
         self.bots =[]
-        self.players.append(Player(**{"name":"Bot","id":0,"color":(0,0,255)}))
-        self.players.append(Player(**{"name":"SuperBot","id":1,"color":(0,255,0)}))
-        self.players.append(Player(**{"name":"Aurélien","id":2,"color":(255,0,0)}))
-        self.players.append(Player(**{"name":"Arnaud","id":3,"color":(255,255,0)}))
-        for i in range(1):
-            self.bots.append(Bot(self.players[i],None))
-        self.bots.append(CleverBot(self.players[1],None))
+        self.players.append(Player(**{"name":name[0],"id":0,"color":(0,0,255)}))
+        self.players.append(Player(**{"name":name[1],"id":1,"color":(0,255,0)}))
+        self.players.append(Player(**{"name":name[2],"id":2,"color":(255,0,0)}))
+        self.players.append(Player(**{"name":name[3],"id":3,"color":(255,255,0)}))
+        for i in range(4):
+            if is_bot[i]:
+                self.bots.append(Bot(self.players[i],None))
         
 
         kwargs = {"players":self.players}

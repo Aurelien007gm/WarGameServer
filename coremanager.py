@@ -195,7 +195,7 @@ class CoreManager:
         t.append(TerritoryTaipan(**{"name": "Jungle 13","id":13 ,"animals":animals}))
         t.append(TerritoryCoq(**{"name": "Jungle 14","id":14 ,"animals":animals}))
         t.append(TerritoryParesseux(**{"name": "Jungle 15","id":15 ,"animals":animals}))
-        t = kwargs["territories"]
+        ##t = kwargs["territories"]
         nbterritory = len(t)
         nbPlayer = len(self.players)
         territoryPerPlayer = nbterritory//nbPlayer
@@ -205,7 +205,7 @@ class CoreManager:
             for i in range(territoryPerPlayer):
                 owners.append(p.id)
         
-        for r in remainder:
+        for r in range(remainder):
             owners.append(-1)
 
 

@@ -179,6 +179,14 @@ class Territory:
     def BeforeEnd(self):
         #This method is called right before turn ends
         return
+    
+    def ToJson(self):
+        res = {}
+        for key, value in self.troop.values():
+            res[key] = value
+        res["id"] = self.id
+        res["owner_id"] = self.owner_id
+        return(res)
 
 class TerritoryMultiple(Territory):
     def __init__(self,**kwargs):

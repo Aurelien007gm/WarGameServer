@@ -35,6 +35,9 @@ class Contract:
     def Fail(self,arg):
         return
     
+    def ToJson(self):
+        return({"countdown":self.countdown})
+    
 class Stingy(Contract):
     def __init__(self):
         super().__init__()

@@ -14,7 +14,6 @@ from map import MAP
 class CoreManager:
 
     def __init__(self,**kwargs):
-        self.territories = []
         self.players = kwargs["players"] or []
         ##self.players.append(Player(**{"name":"Arnaud","id":0}))
         ##self.players.append(Player(**{"name":"Aurélien","id":1}))
@@ -56,7 +55,7 @@ class CoreManager:
         self._Deploy(t,field,navy,para)
 
     def Begin(self):
-        for t in self.territories:
+        for t in self.tm.territories:
             t.BeginTurn()
         return
 
@@ -258,6 +257,16 @@ class CoreManager:
                 terr.append(t)
 
         return(terr)
+    
+    def ToJson(self):
+        res = self.tm.ToJson()
+        res["players"] = []
+        for player in self.players:
+            res["players"].append(player.ToJson())
+        return(res)
+
+
+            
 
 
 

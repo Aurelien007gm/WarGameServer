@@ -42,5 +42,8 @@ class Game:
     def print(self):
         self.cm.print()
 
+    def ToJson(self):
+        return(self.cm.ToJson())
+
 
 

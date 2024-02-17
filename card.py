@@ -9,4 +9,5 @@ class Card:
     def print(self):
         print("Attaque : "+ str(self.attack) + " ,Defense : " +str(self.defense))
 
-
+    def ToJson(self):
+        return{"attack":self.attack,"defense":self.defense}

@@ -56,6 +56,17 @@ class Player:
         contract.Print()
         self.contracts.append(contract)
 
+    def ToJson(self):
+        res = {"name" : self.name,"money":self.money,"cards":[],"contracts":[]}
+
+        for c in self.cards:
+            res["cards"].append(c.ToJson())
+
+        for c in self.contracts:
+            res["contracts"].append(c.ToJson())
+
+        return(res)
+
 
     
 class Animal(Player):

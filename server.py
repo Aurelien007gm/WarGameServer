@@ -32,6 +32,9 @@ class server():
             
             if(action == 'print'):
                 game.print()
+
+            if(action == "getgame"):
+                myjson = game.ToJson()
                 
                     
             
@@ -42,6 +45,27 @@ class server():
 
             response = {'success': True}
             self.wfile.write(json.dumps(response).encode('utf-8'))
+
+
+        def do_GET(self):
+            global game
+            print(self.path)
+            if self.path == '/get_game_json':
+                if game:
+                    game.print()
+                    json_data = game.ToJson()
+                    self.send_response(200)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    print(json_data)
+                    self.wfile.write(json.dumps(json_data).encode('utf-8'))
+                else:
+                    self.send_response(404)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    print("An error occured")
+                    response = {'error': 'Game not initialized'}
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
 
     def run(server_class=HTTPServer, handler_class=RequestHandler, port=8000):
         server_address = ('', port)

@@ -81,5 +81,17 @@ class TerritoryManager:
         for key,value in compo.items():
             t.troop[key] -= value
 
+    def ToJson(self):
+        print("hey2")
+        result = {"territories": []}
+
+        for territory in self.territories:
+            territory.print()
+            print("...")
+            print(territory.ToJson())
+            result["territories"].append(territory.ToJson())
+
+        return result
+
     
 

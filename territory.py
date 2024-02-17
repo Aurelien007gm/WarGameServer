@@ -182,7 +182,7 @@ class Territory:
     
     def ToJson(self):
         res = {}
-        for key, value in self.troop.values():
+        for key, value in self.troop.items():
             res[key] = value
         res["id"] = self.id
         res["owner_id"] = self.owner_id

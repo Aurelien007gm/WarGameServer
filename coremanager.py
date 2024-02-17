@@ -24,7 +24,7 @@ class CoreManager:
             self.tm.SetConnectivity(p)
         self.actions = []
         self.am.continent = self.tm.continent
-        self.turn = 0
+        self.turn = 1
 
     def _Deploy(self,t:Territory,field,navy,para):
         owner = t.owner
@@ -207,8 +207,8 @@ class CoreManager:
         for r in range(remainder):
             owners.append(-1)
 
-
-        rd.shuffle(owners)
+        # UNCOMMENT THE FOLLOWING LINE PLEASE
+        #rd.shuffle(owners)
         for i in range(16):
             if(owners[i]) >= 0:
                 t[i].owner_id = owners[i]
@@ -239,16 +239,21 @@ class CoreManager:
         self.actions.sort(key = lambda t:t.value)
         action_dict = {"Attack":self.Attack,"Deploy":self.Deploy,"Transfer":self.Transfer,"DiscardCard":self.DiscardCard}
         for action in filter(lambda act: (act.name in ["Deploy","Transfer","DiscardCard"]),self.actions):
+            print("Executing the following action :")
+            action.print()
             func = action_dict.get(action.name)
             func(**action.args)
 
         for action in filter(lambda act: (act.name in ["Attack"]),self.actions):
+            print("Executing the following action :")
+            action.print()
             func = action_dict.get(action.name)
             func(**action.args)
         self.actions = []
         self.EndTurn()
         for p in self.players:
             self.tm.SetConnectivity(p)
+        self.turn += 1
 
     def GetTerritory(self,p:int):
         terr = []
@@ -260,10 +265,25 @@ class CoreManager:
     
     def ToJson(self):
         res = self.tm.ToJson()
+        res["turn"] = self.turn
         res["players"] = []
         for player in self.players:
             res["players"].append(player.ToJson())
         return(res)
+    
+    def Validate(self,p):
+        run = True
+        self.players[p].Validate()
+        for player in self.players:
+            print(player.id,player.isbot,player.ready)
+            if not player.ready:
+                run = False
+                print(f"player{player.name} is not ready")
+        if(run):
+            print("All player ready")
+        else:
+            print("Not all player are ready")
+        return(run)
 
 
             

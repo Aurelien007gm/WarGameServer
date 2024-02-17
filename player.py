@@ -10,6 +10,9 @@ class Player:
         self.color = kwargs.get("color") or (127,127,127)
         self.cards = []
         self.contracts = []
+       
+        self.isbot = kwargs.get("isbot")
+        self.ready = self.isbot
         for i in range(10):
             self.cards.append(Card())
         self.DrawContract()
@@ -27,6 +30,9 @@ class Player:
         print("Player Cards are " )
         for c in self.cards:
             c.print()
+
+    def Validate(self):
+        self.ready = True
 
     def DiscardCard(self,cost = None):
         self.cards.sort(key=lambda t:t.attack + t.defense)
@@ -50,6 +56,8 @@ class Player:
             contract.Print()
             contract.EndTurn()
         self.contracts = [c for c in self.contracts if not c.CheckDelete()]
+        if(not self.isbot):
+            self.ready = False
     def DrawContract(self):
         contract = Stingy()
         contract.player = self
@@ -57,7 +65,7 @@ class Player:
         self.contracts.append(contract)
 
     def ToJson(self):
-        res = {"name" : self.name,"money":self.money,"cards":[],"contracts":[]}
+        res = {"name" : self.name,"id":self.id,"money":self.money,"cards":[],"contracts":[]}
 
         for c in self.cards:
             res["cards"].append(c.ToJson())

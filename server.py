@@ -24,10 +24,14 @@ class server():
                 player_id = data.get("player_id")
                 acts = data.get('acts')
                 for act in acts:
-                    name = acts.get("name")
+                    name = act.get("name")
                     kwargs = act.get("kwargs")
+                    print(kwargs)
                     gameAction = Action(name, **kwargs)
+                    gameAction.print()
                     game.Call(gameAction)
+                    for a in game.cm.actions:
+                        a.print()
 
             
             if(action == 'print'):
@@ -35,6 +39,10 @@ class server():
 
             if(action == "getgame"):
                 myjson = game.ToJson()
+
+            if(action == "validate"):
+                player_id = data.get("player_id")
+                game.Validate(player_id)
                 
                     
             

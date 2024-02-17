@@ -39,6 +39,8 @@ class Bot:
             if(rd.random()<0.20):
                 randomterrDed = 11
             act.append(Action("Attack",t0 = randomterrAttack,t1 = randomterrDef))
+            for a in act:
+                a.print()
         return(act)
         
 

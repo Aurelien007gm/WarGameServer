@@ -39,10 +39,7 @@ class Game:
             for act in botAct:
                 self.cm.SetAction(act)
                 act.print()
-        print(f"Time for round {self.round}")
-        print("Print all action on Run")
-        for a in self.cm.actions:
-            a.print()
+        print(f"Running roung {self.round}")
         self.cm.Run()
         self.round += 1
 

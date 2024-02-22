@@ -1,7 +1,7 @@
 class Continent :
 
     def __init__(self,**kwargs):
-        self.continent = {0:range(0,12),1:range(12,18),2:range(18,20)}
+        self.continent = {0:range(0,12),1:range(12,18),2:range(18,23),3:range(23,32)}
         self.continent_inverse = {}
         self.ComputeInverse()
         self.tm = kwargs.get("tm")
@@ -22,7 +22,7 @@ class Continent :
             
             # Custom logic for specific map, should be modified
             if(owned):
-                if(continent < 2):
+                if(continent != 2):
                     self.tm.territories[territories[0]].owner.AddMoney(1000)
                 else:
                     self.tm.territories[territories[0]].owner.AddMoney(200)

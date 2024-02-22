@@ -43,7 +43,7 @@ class CoreManager:
             print("No territory to deploy")
             return
 
-        price = {"field": 1000,"navy":1200,"para":1500}
+        price = {"field": 1000,"navy":1500,"para":2000}
         cost = price["field"]*field + price["navy"]*navy + price["para"]*para
         t = self.tm.territories[territory]
 
@@ -198,6 +198,9 @@ class CoreManager:
         t.append(Territory(**{"name": "Jungle 17","id":17 ,"animals":animals}))
         t.append(Territory(**{"name": "Jungle 18","id":18 ,"animals":animals}))
         t.append(Territory(**{"name": "Jungle 19","id":19 ,"animals":animals}))
+
+        for i in range(20,32):
+            t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
         ##t = kwargs["territories"]
         nbterritory = len(t)
         nbPlayer = len(self.players)
@@ -219,7 +222,7 @@ class CoreManager:
                 t[i].owner = self.players[owners[i]]
                 t[i].troop["field"] = 2
             else:
-                t[i].owner = self.animals
+                t[i].owner = animals
                 t[i].owner_id = -1
                 t[i].owner_name = "animals"
                 t[i].troop = {"field":0,"navy":0,"para":0,"animals":self.maxAnimals}

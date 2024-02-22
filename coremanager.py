@@ -194,6 +194,10 @@ class CoreManager:
         t.append(TerritoryTaipan(**{"name": "Jungle 13","id":13 ,"animals":animals}))
         t.append(TerritoryCoq(**{"name": "Jungle 14","id":14 ,"animals":animals}))
         t.append(TerritoryParesseux(**{"name": "Jungle 15","id":15 ,"animals":animals}))
+        t.append(Territory(**{"name": "Jungle 16","id":16 ,"animals":animals}))
+        t.append(Territory(**{"name": "Jungle 17","id":17 ,"animals":animals}))
+        t.append(Territory(**{"name": "Jungle 18","id":18 ,"animals":animals}))
+        t.append(Territory(**{"name": "Jungle 19","id":19 ,"animals":animals}))
         ##t = kwargs["territories"]
         nbterritory = len(t)
         nbPlayer = len(self.players)
@@ -207,9 +211,9 @@ class CoreManager:
         for r in range(remainder):
             owners.append(-1)
 
-        # UNCOMMENT THE FOLLOWING LINE PLEASE
-        #rd.shuffle(owners)
-        for i in range(16):
+    
+        rd.shuffle(owners)
+        for i in range(nbterritory):
             if(owners[i]) >= 0:
                 t[i].owner_id = owners[i]
                 t[i].owner = self.players[owners[i]]

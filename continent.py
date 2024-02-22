@@ -1,7 +1,7 @@
 class Continent :
 
     def __init__(self,**kwargs):
-        self.continent = {0:[0,1,2],1:[3,4,5,6,7],2:[8,9,10,11],3:[12,13,14,15]}
+        self.continent = {0:range(0,12),1:range(12,18),2:range(18,20)}
         self.continent_inverse = {}
         self.ComputeInverse()
         self.tm = kwargs.get("tm")
@@ -20,8 +20,13 @@ class Continent :
                 if(self.tm.territories[t].owner_id != owner):
                     owned = False
             
+            # Custom logic for specific map, should be modified
             if(owned):
-                self.tm.territories[territories[0]].owner.AddMoney(1000)
+                if(continent < 2):
+                    self.tm.territories[territories[0]].owner.AddMoney(1000)
+                else:
+                    self.tm.territories[territories[0]].owner.AddMoney(200)
+
             
     def HasContinent(self,player:int,t:int):
         res = True

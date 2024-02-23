@@ -52,6 +52,9 @@ class Game:
     def ToJson(self):
         return(self.cm.ToJson())
     
+    def StaticTerritoriesToJson(self):
+        return(self.cm.StaticTerritoriesToJson())
+    
     def Validate(self, p):
         run = self.cm.Validate(p)
         if(run):

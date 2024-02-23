@@ -85,11 +85,17 @@ class TerritoryManager:
         result = {"territories": []}
 
         for territory in self.territories:
-            territory.print()
-            print("...")
-            print(territory.ToJson())
             result["territories"].append(territory.ToJson())
 
+        return result
+    
+    def ToStaticJson(self):
+        # Do not includes troop on territories but include effect
+        # Return a list, without the labal territories
+        result = []
+
+        for territory in self.territories:
+            result.append(territory.ToStaticJson())
         return result
 
     

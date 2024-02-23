@@ -278,6 +278,12 @@ class CoreManager:
             res["players"].append(player.ToJson())
         return(res)
     
+    def StaticTerritoriesToJson(self):
+        res = self.tm.ToStaticJson()
+        return(res)
+    
+
+    
     def Validate(self,p):
         run = True
         self.players[p].Validate()

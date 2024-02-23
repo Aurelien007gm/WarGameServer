@@ -187,6 +187,14 @@ class Territory:
         res["id"] = self.id
         res["owner_id"] = self.owner_id
         return(res)
+    
+
+    def ToStaticJson(self):
+        res = {}
+        res["id"] = self.id
+        res["name"] = self.name
+        res["effect"] = self.effect
+        return(res)
 
 class TerritoryMultiple(Territory):
     def __init__(self,**kwargs):
@@ -365,7 +373,7 @@ class TerritoryMacaque(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.effectiveReward = self.value
-        self.effect ="Reward is double if at least 5 territory at the beginning of the turn"
+        self.effect ="Reward is double if at least 5 troop at the beginning of the turn"
 
     def BeforeEnd(self):
         count = self.CountTroop()

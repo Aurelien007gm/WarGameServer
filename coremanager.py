@@ -4,7 +4,8 @@ from territory import (Territory,TerritoryMultiple,TerritoryCard,TerritoryElepha
                        TerritoryGorilla,TerritoryAlpaga,TerritoryCoati,TerritoryYack,
                        TerritoryChacal,TerritoryLama,TerritoryCoq,TerritoryFennec,TerritoryHyena,
                        TerritoryKoala,TerritoryMacaque,TerritoryParesseux,TerritoryPenguin,TerritoryTaipan,
-                       TerritoryTapir,TerritoryZebra)
+                       TerritoryTapir,TerritoryZebra,TerritoryEagle,TerritoryPelican,TerritoryAlbatros,
+                       TerritoryLion,TerritoryPanthera,TerritoryJaguar)
 from player import Player,Animal
 import numpy as np
 import random as rd
@@ -188,18 +189,27 @@ class CoreManager:
         t.append(TerritoryYack(**{"name": "Jungle 7","id":7 ,"animals":animals}))
         t.append(TerritoryElephant(**{"name": "Jungle 8","id":8 ,"animals":animals}))
         t.append(TerritoryZebra(**{"name": "Jungle 9","id":9 ,"animals":animals}))
-        t.append(TerritoryChacal(**{"name": "Jungle 10","id":10 ,"animals":animals}))
+        t.append(TerritoryAlbatros(**{"name": "Jungle 10","id":10 ,"animals":animals,"tm":self.tm}))
         t.append(TerritoryTapir(**{"name": "Jungle 11","id":11 ,"animals":animals}))
         t.append(TerritoryPenguin(**{"name": "Jungle 12","id":12 ,"animals":animals}))
         t.append(TerritoryTaipan(**{"name": "Jungle 13","id":13 ,"animals":animals}))
         t.append(TerritoryCoq(**{"name": "Jungle 14","id":14 ,"animals":animals}))
-        t.append(TerritoryParesseux(**{"name": "Jungle 15","id":15 ,"animals":animals}))
+        t.append(TerritoryPanthera(**{"name": "Jungle 15","id":15 ,"animals":animals,"tm":self.tm}))
         t.append(Territory(**{"name": "Jungle 16","id":16 ,"animals":animals}))
-        t.append(Territory(**{"name": "Jungle 17","id":17 ,"animals":animals}))
+        t.append(TerritoryEagle(**{"name": "Jungle 17","id":17 ,"animals":animals,"tm":self.tm}))
         t.append(Territory(**{"name": "Jungle 18","id":18 ,"animals":animals}))
         t.append(Territory(**{"name": "Jungle 19","id":19 ,"animals":animals}))
+        t.append(TerritoryChacal(**{"name": "Jungle 20","id":20 ,"animals":animals}))
+        t.append(TerritoryPelican(**{"name": "Jungle 21","id":21 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryParesseux(**{"name": "Jungle 22","id":22 ,"animals":animals}))
 
-        for i in range(20,32):
+        for i in range(23,28):
+            t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
+
+        t.append(TerritoryJaguar(**{"name": "Jungle 28","id":28 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryLion(**{"name": "Jungle 15","id":29 ,"animals":animals,"tm":self.tm}))
+
+        for i in range(30,32):
             t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
         ##t = kwargs["territories"]
         nbterritory = len(t)
@@ -228,6 +238,16 @@ class CoreManager:
                 t[i].troop = {"field":0,"navy":0,"para":0,"animals":self.maxAnimals}
 
         self.tm = TerritoryManager(territories = t)
+
+
+        # Should be removed and have better logic
+        t[10].tm = self.tm
+        t[15].tm = self.tm
+        t[17].tm = self.tm
+        t[21].tm = self.tm
+        t[27].tm = self.tm
+        t[28].tm = self.tm
+
         self.tm.adjacent = MAP
             
 

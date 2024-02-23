@@ -97,6 +97,28 @@ class TerritoryManager:
         for territory in self.territories:
             result.append(territory.ToStaticJson())
         return result
+    
+    def HaveBird(self,player_id):
+
+        # Check ids are correct if you changes territories
+        ids = [10,17,21]
+        res = True
+        for id in ids:
+            if (self.territories[id].owner_id != player_id):
+                res = False
+
+        return(res)
+    
+    def HaveFelins(self,player_id):
+
+        # Check ids are correct if you changes territories
+        ids = [15,28,29]
+        res = True
+        for id in ids:
+            if (self.territories[id].owner_id != player_id):
+                res = False
+
+        return(res)
 
     
 

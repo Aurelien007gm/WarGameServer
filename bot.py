@@ -126,10 +126,15 @@ class CleverBot(Bot):
     def SmartAttackToChoice(self,fr):
         weights = []
         for t in self.cm.tm.territories:
-            if(self.cm.tm.adjacent[t.id,fr] == 2 and t.owner_id != self.player.id):
-                weight = 5
+            if(self.cm.tm.adjacent[t.id,fr] == 2):
+                weight = 10
             else:
                 weight = 1
+
+            if(t.eventOn):
+                weight *= 3
+            if(t.owner_id != self.player.id):
+                weight = 0
             weights.append(weight)
         randomterr = rd.choices(self.cm.tm.territories,weights = weights)[0].id
         return(randomterr)

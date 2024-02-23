@@ -17,7 +17,9 @@ class Game:
         self.players.append(Player(**{"name":name[3],"id":3,"color":(255,255,0),"isbot":is_bot[3]}))
         for i in range(4):
             if is_bot[i]:
-                self.bots.append(Bot(self.players[i],None))
+                #self.bots.append(Bot(self.players[i],None))
+                self.bots.append(CleverBot(self.players[i],None))
+                
         
 
         kwargs = {"players":self.players}

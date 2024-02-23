@@ -26,8 +26,8 @@ class Territory:
         self.upriseProbability = 0.15
 
 
-        self.eventProb = 0.01
-        self.eventReward = 6000
+        self.eventProb = 0.005
+        self.eventReward = 5000
         self.eventCountdown = 0
         self.eventOn = False
 
@@ -141,7 +141,7 @@ class Territory:
         elif(rd.random() < self.eventProb):
             print("Event on territory" + self.name)
             self.eventOn = True
-            self.eventCountdown = rd.randint(2,5)
+            self.eventCountdown = rd.randint(3,5)
         
         return
 
@@ -186,6 +186,8 @@ class Territory:
             res[key] = value
         res["id"] = self.id
         res["owner_id"] = self.owner_id
+        res["event_on"] = self.eventOn
+        res["event_countdown"] = self.eventCountdown
         return(res)
     
 
@@ -277,32 +279,32 @@ class TerritoryZebra(Territory):
 class TerritoryChacal(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.eventProb *= 0.33333
-        self.effect ="Event are 3 times less likely on this territory"
+        self.eventProb *= 0.5
+        self.effect ="Event are 2 times less likely on this territory"
 
 class TerritoryTapir(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.eventProb *= 0.2
-        self.effect ="Event are 5 times less likely on this territory."
+        self.eventProb *= 0.25
+        self.effect ="Event are 4 times less likely on this territory."
 
 class TerritoryPenguin(Territory):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.eventProb *= 2
+        self.effect ="Event are 2 times more likely on this territory."
+
+class TerritoryTaipan(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.eventProb *= 3
         self.effect ="Event are 3 times more likely on this territory."
 
-class TerritoryTaipan(Territory):
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
-        self.eventProb *= 5
-        self.effect ="Event are 5 times more likely on this territory."
-
 class TerritoryCoq(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.eventReward *= 3
-        self.effect ="Reward for event on this territory are 3 times higher than normal."
+        self.eventReward *= 2
+        self.effect ="Reward for event on this territory are 2 times higher than normal."
 
 class TerritoryParesseux(Territory):
     def __init__(self,**kwargs):
@@ -331,7 +333,7 @@ class TerritoryFennec(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.effectiveReward = self.value
-        self.effect ="Reward is double if at least 5 territory at the beginning of the turn"
+        self.effect ="Reward is double if at least 5 troop are on territory at the beginning of the turn"
 
     def Begin(self):
         count = self.CountTroop()
@@ -385,3 +387,86 @@ class TerritoryMacaque(Territory):
     
     def Reward(self):
         return(self.effectiveReward)
+    
+class TerritoryEagle(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="50 percent of receiving a free para if all bird territory are under your control"
+
+    def EndTurn(self):
+
+        have_bird = self.tm.HaveBird(self.owner_id)
+        if(have_bird and rd.random()>0.5 and self.owner_id >=0):
+            self.Deploy(para = 1)
+
+
+class TerritoryAlbatros(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="50 percent of receiving a free para if all bird territory are under your control"
+
+    def EndTurn(self):
+
+        have_bird = self.tm.HaveBird(self.owner_id)
+        if(have_bird and rd.random()>0.5 and self.owner_id >=0):
+            self.Deploy(para = 1)
+
+class TerritoryPelican(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="50 percent of receiving a free para if all bird territory are under your control"
+
+    def EndTurn(self):
+
+        have_bird = self.tm.HaveBird(self.owner_id)
+        if(have_bird and rd.random()>0.5 and self.owner_id >=0):
+            self.Deploy(para = 1)
+
+class TerritoryLion(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar)"
+
+    def SetMaxTroop(self, hasContinent = False):
+        super().SetMaxTroop(hasContinent)
+
+        if(self.tm.HaveFelins(self.owner_id)):
+            self.maxTroopAttack += 1 
+        return
+    
+class TerritoryPanthera(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar)"
+
+    def SetMaxTroop(self, hasContinent = False):
+        super().SetMaxTroop(hasContinent)
+
+        if(self.tm.HaveFelins(self.owner_id)):
+            self.maxTroopAttack += 1 
+        return
+    
+class TerritoryJaguar(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar)"
+
+    def SetMaxTroop(self, hasContinent = False):
+        super().SetMaxTroop(hasContinent)
+
+        if(self.tm.HaveFelins(self.owner_id)):
+            self.maxTroopAttack += 1 
+        return
+

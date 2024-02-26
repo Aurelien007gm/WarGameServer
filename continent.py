@@ -1,7 +1,7 @@
 class Continent :
 
     def __init__(self,**kwargs):
-        self.continent = {0:range(0,12),1:range(12,18),2:range(18,23),3:range(23,32)}
+        self.continent = {0:range(0,12),1:range(12,18),2:range(18,23),3:range(23,35),4:range(35,46)}
         self.continent_inverse = {}
         self.ComputeInverse()
         self.tm = kwargs.get("tm")

@@ -67,7 +67,8 @@ class server():
                 self.wfile.write(json.dumps(response).encode('utf-8'))
 
 
-            funct_dict = {"/get_game_json": game.ToJson,"/get_territories_json":game.StaticTerritoriesToJson}
+            funct_dict = {"/get_game_json": game.ToJson,"/get_territories_json":game.StaticTerritoriesToJson,
+                          "/get_log_json":game.LogToJson}
             if(self.path in funct_dict.keys()):
                 json_data = funct_dict[self.path]()
                 self.send_response(200)
@@ -77,7 +78,7 @@ class server():
                 self.wfile.write(json.dumps(json_data).encode('utf-8'))
                 
 
-    def run(server_class=HTTPServer, handler_class=RequestHandler, port=8000):
+    def run(server_class=HTTPServer, handler_class=RequestHandler, port=33800):
         server_address = ('', port)
         httpd = server_class(server_address, handler_class)
         print(f"Serveur démarré sur le port {port}")

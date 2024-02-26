@@ -14,20 +14,20 @@ class Bot:
         act = []
         terr = self.cm.GetTerritory(self.player.id)
         money = self.player.money
-        price = {"field": 1000,"navy":1200,"para":1500}
+        price = {"field": 1000,"navy":1500,"para":2000}
         troopToDeploy = {"field": 0,"navy":0,"para":0}
         if(terr):
             randomterr = rd.choice(terr).id
             troopToDeploy["t0"] = randomterr
-            while(money > 1500):
+            while(money > 2000):
                 ##troop,value = rd.choice(list(price.items()))
                 i = rd.randint(0,10)
-                if(i <= 5):
+                if(i <= 6):
                     troop,value = "field",1000
                 elif(i<=8):
-                    troop,value = "navy", 1200
+                    troop,value = "navy", 1500
                 else:
-                    troop,value = "para",1500
+                    troop,value = "para",2000
 
                 troopToDeploy[troop] += 1
                 money-= value
@@ -54,20 +54,20 @@ class CleverBot(Bot):
         act = []
         terr = self.cm.GetTerritory(self.player.id)
         money = self.player.money
-        price = {"field": 1000,"navy":1200,"para":1500}
+        price = {"field": 1000,"navy":1500,"para":2000}
         troopToDeploy = {"field": 0,"navy":0,"para":0}
         if(terr):
             randomterr = rd.choice(terr).id
             troopToDeploy["t0"] = randomterr
-            while(money > 1500):
+            while(money > 2000):
                 ##troop,value = rd.choice(list(price.items()))
                 i = rd.randint(0,10)
-                if(i <= 6):
+                if(i <= 7):
                     troop,value = "field",1000
                 elif(i<=9):
-                    troop,value = "navy", 1200
+                    troop,value = "navy", 1500
                 else:
-                    troop,value = "para",1500
+                    troop,value = "para",2000
 
                 troopToDeploy[troop] += 1
                 money-= value
@@ -86,21 +86,9 @@ class CleverBot(Bot):
             randomterrAttack = rd.choice(choices).id"""
             randomterrAttack = self.SmartAttackFromChoice()
             randomterrDef = self.SmartAttackToChoice(randomterrAttack)
-
-            """choices = []
-            for t in self.cm.tm.territories:
-                choices.append(t)
-                if(self.cm.tm.adjacent[t.id,randomterrAttack] == 2):
-                    choices.append(t)
-                    choices.append(t)
-                    choices.append(t)
-                    choices.append(t)
-
-                if(t.id == 11):
-                    choices.append(t)
-                    choices.append(t)
-                
-            randomterrDef = rd.choice(choices).id"""
+            act.append(Action("Attack",t0 = randomterrAttack,t1 = randomterrDef))
+            randomterrAttack = self.SmartAttackFromChoice()
+            randomterrDef = self.SmartAttackToChoice(randomterrAttack)
             act.append(Action("Attack",t0 = randomterrAttack,t1 = randomterrDef))
         return(act)
     
@@ -113,7 +101,7 @@ class CleverBot(Bot):
         terr = self.cm.GetTerritory(self.player.id)
         weights = []
         for t in terr:
-            weight = t.CountTroop()
+            weight = t.CountTroop()**2
             weights.append(weight)
 
         randomterr = rd.choices(terr,weights = weights)[0].id
@@ -133,8 +121,8 @@ class CleverBot(Bot):
 
             if(t.eventOn):
                 weight *= 3
-            if(t.owner_id != self.player.id):
-                weight = 0
+            if(t.owner_id == self.player.id):
+                weight = 0.01
             weights.append(weight)
         randomterr = rd.choices(self.cm.tm.territories,weights = weights)[0].id
         return(randomterr)

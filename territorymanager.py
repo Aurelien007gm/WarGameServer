@@ -12,6 +12,10 @@ class TerritoryManager:
         self.connectivity = {}
 
     def ComputeConnectedMatrix(self,player:int):
+        print("===========")
+        print(self.nb_territory)
+        print(len(self.territories))
+        print(len(self.adjacent))
         new = np.zeros((self.nb_territory,self.nb_territory))
         for i in range(self.nb_territory):
             for j in range(self.nb_territory):
@@ -109,6 +113,19 @@ class TerritoryManager:
 
         return(res)
     
+
+    def HaveFish(self,player_id):
+
+        # Check ids are correct if you changes territories
+        ids = [18,19,23]
+        res = True
+        for id in ids:
+            if (self.territories[id].owner_id != player_id):
+                res = False
+
+        return(res)
+    
+
     def HaveFelins(self,player_id):
 
         # Check ids are correct if you changes territories
@@ -117,6 +134,17 @@ class TerritoryManager:
         for id in ids:
             if (self.territories[id].owner_id != player_id):
                 res = False
+
+        return(res)
+    
+    def CountMythical(self,player_id):
+
+        # Check ids are correct if you changes territories
+        ids = [34,35,37,39]
+        res = 0
+        for id in ids:
+            if (self.territories[id].owner_id != player_id):
+                res += 1
 
         return(res)
 

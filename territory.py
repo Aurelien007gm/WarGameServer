@@ -26,7 +26,7 @@ class Territory:
         self.upriseProbability = 0.15
 
 
-        self.eventProb = 0.005
+        self.eventProb = 0.02
         self.eventReward = 5000
         self.eventCountdown = 0
         self.eventOn = False
@@ -141,7 +141,7 @@ class Territory:
         elif(rd.random() < self.eventProb):
             print("Event on territory" + self.name)
             self.eventOn = True
-            self.eventCountdown = rd.randint(3,5)
+            self.eventCountdown = rd.randint(2,4)
         
         return
 
@@ -154,6 +154,7 @@ class Territory:
                 self.Uprise()
         elif(self.owner_id == -1):
             self.Regenerate()
+        self.hasAttacked = False
         return
 
     def Uprise(self):
@@ -224,11 +225,23 @@ class TerritoryGorilla(Territory):
 
         def __init__(self,**kwargs):
             super().__init__(**kwargs)
-            self.effect ="If no attack from this territory, 20 percent of adding a bonus troop at the end of the turn"
+            self.effect ="If no attack from this territory, 30 percent of adding a bonus troop at the end of the turn"
         
         def EndTurn(self):
             print("Bonus troop on gorilla territory")
-            if(not self.hasAttacked and rd.random()< 0.2 and self.owner !=-1):
+            if(not self.hasAttacked and rd.random()< 0.3 and self.owner !=-1 and not self.hasbeentaken):
+                self.Deploy(field = 1)
+            super().EndTurn()
+
+class TerritoryBonobo(Territory):
+
+        def __init__(self,**kwargs):
+            super().__init__(**kwargs)
+            self.effect ="If an attack, succesfull of not, was launch from this territory, 30 percent of adding a bonus troop at the end of the turn"
+        
+        def EndTurn(self):
+            print("Bonus troop on bonobo territory")
+            if(self.hasAttacked and rd.random()< 0.3 and self.owner !=-1 and not self.hasbeentaken):
                 self.Deploy(field = 1)
             super().EndTurn()
 
@@ -393,7 +406,7 @@ class TerritoryEagle(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="50 percent of receiving a free para if all bird territory are under your control"
+        self.effect ="50 percent of receiving a free para if all bird territory (eagle,albatros,pelican) are under your control"
 
     def EndTurn(self):
 
@@ -407,7 +420,7 @@ class TerritoryAlbatros(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="50 percent of receiving a free para if all bird territory are under your control"
+        self.effect ="50 percent of receiving a free para if all bird territory (eagle,albatros,pelican)  are under your control"
 
     def EndTurn(self):
 
@@ -420,7 +433,7 @@ class TerritoryPelican(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="50 percent of receiving a free para if all bird territory are under your control"
+        self.effect ="50 percent of receiving a free para if all bird territory (eagle,albatros,pelican)  are under your control"
 
     def EndTurn(self):
 
@@ -428,12 +441,53 @@ class TerritoryPelican(Territory):
         if(have_bird and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(para = 1)
 
+
+class TerritoryShark(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="50 percent of receiving a free navy if all fish territory ( shark, dolphin, calmar) are under your control"
+
+    def EndTurn(self):
+
+        have_fish= self.tm.HaveFish(self.owner_id)
+        if(have_fish and rd.random()>0.5 and self.owner_id >=0):
+            self.Deploy(navy = 1)
+
+class TerritoryDolphin(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="50 percent of receiving a free navy if all fish territory ( shark, dolphin, calmar) are under your control"
+
+    def EndTurn(self):
+
+        have_fish= self.tm.HaveFish(self.owner_id)
+        if(have_fish and rd.random()>0.5 and self.owner_id >=0):
+            self.Deploy(navy = 1)
+
+class TerritoryCalmar(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="50 percent of receiving a free navy if all fish territory ( shark, dolphin, calmar) are under your control"
+
+    def EndTurn(self):
+
+        have_fish= self.tm.HaveFish(self.owner_id)
+        if(have_fish and rd.random()>0.5 and self.owner_id >=0):
+            self.Deploy(navy = 1)
+
+
 class TerritoryLion(Territory):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar)"
+        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar) are on your control"
 
     def SetMaxTroop(self, hasContinent = False):
         super().SetMaxTroop(hasContinent)
@@ -447,7 +501,7 @@ class TerritoryPanthera(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar)"
+        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar) are on your control"
 
     def SetMaxTroop(self, hasContinent = False):
         super().SetMaxTroop(hasContinent)
@@ -461,7 +515,7 @@ class TerritoryJaguar(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar)"
+        self.effect ="Attack with 1 more troop if all felins (Lions, Panthera, Jaguar) are on your control"
 
     def SetMaxTroop(self, hasContinent = False):
         super().SetMaxTroop(hasContinent)
@@ -469,4 +523,117 @@ class TerritoryJaguar(Territory):
         if(self.tm.HaveFelins(self.owner_id)):
             self.maxTroopAttack += 1 
         return
+    
+class TerritoryTatoo(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Defend with 1 more troop if all shell anmial (Tatoo, Turtle, Pangolin) are on your control"
+
+    def SetMaxTroop(self, hasContinent = False):
+        super().SetMaxTroop(hasContinent)
+
+        if(self.tm.HaveFelins(self.owner_id)):
+            self.maxTroopDefense += 1 
+        return
+    
+class TerritoryTurtle(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Defend with 1 more troop if all shell anmial (Tatoo, Turtle, Pangolin) are on your control"
+
+    def SetMaxTroop(self, hasContinent = False):
+        super().SetMaxTroop(hasContinent)
+
+        if(self.tm.HaveFelins(self.owner_id)):
+            self.maxTroopDefense += 1 
+        return
+
+class TerritoryPangolin(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Defend with 1 more troop if all shell anmial (Tatoo, Turtle, Pangolin) are on your control"
+
+    def SetMaxTroop(self, hasContinent = False):
+        super().SetMaxTroop(hasContinent)
+
+        if(self.tm.HaveFelins(self.owner_id)):
+            self.maxTroopDefense += 1 
+        return
+    
+class TerritoryDragon(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="The more mythological animals [ dragon, minothaure, hydra, licorne] you own, the more the reward \n 1 : *1 \n 2 : *1.2 \n 3 : *1.5 \n 4 : *2"
+
+    def EndTurn(self):
+        
+        nb = self.tm.CountMythical(self.owner_id)
+        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        self.value = reward[nb]
+        super().EndTurn()
+
+class TerritoryLicorne(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="The more mythological animals [ dragon, minothaure, hydra, licorne] you own, the more the reward \n 1 : *1 \n 2 : *1.2 \n 3 : *1.5 \n 4 : *2"
+
+    def EndTurn(self):
+        
+        nb = self.tm.CountMythical(self.owner_id)
+        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        self.value = int(reward[nb]*500)
+        super().EndTurn()
+
+class TerritoryDragon(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="The more mythological animals [ dragon, minothaure, hydra, licorne] you own, the more the reward \n 1 : *1 \n 2 : *1.2 \n 3 : *1.5 \n 4 : *2"
+
+    def EndTurn(self):
+        
+        nb = self.tm.CountMythical(self.owner_id)
+        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        self.value = int(reward[nb]*500)
+        super().EndTurn()
+
+class TerritoryMinothaure(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="The more mythological animals [ dragon, minothaure, hydra, licorne] you own, the more the reward \n 1 : *1 \n 2 : *1.2 \n 3 : *1.5 \n 4 : *2"
+
+    def EndTurn(self):
+        
+        nb = self.tm.CountMythical(self.owner_id)
+        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        self.value = int(reward[nb]*500)
+        super().EndTurn()
+
+class TerritoryHydra(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="The more mythological animals [ dragon, minothaure, hydra, licorne] you own, the more the reward \n 1 : *1 \n 2 : *1.2 \n 3 : *1.5 \n 4 : *2"
+
+    def EndTurn(self):
+        
+        nb = self.tm.CountMythical(self.owner_id)
+        reward = {0:1.0,1:1.0,2:1.2,3:1.5,4:2}
+        self.value = int(reward[nb]*500)
+        super().EndTurn()
+
 

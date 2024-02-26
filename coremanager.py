@@ -5,20 +5,23 @@ from territory import (Territory,TerritoryMultiple,TerritoryCard,TerritoryElepha
                        TerritoryChacal,TerritoryLama,TerritoryCoq,TerritoryFennec,TerritoryHyena,
                        TerritoryKoala,TerritoryMacaque,TerritoryParesseux,TerritoryPenguin,TerritoryTaipan,
                        TerritoryTapir,TerritoryZebra,TerritoryEagle,TerritoryPelican,TerritoryAlbatros,
-                       TerritoryLion,TerritoryPanthera,TerritoryJaguar)
+                       TerritoryLion,TerritoryPanthera,TerritoryJaguar,TerritoryTurtle,TerritoryPangolin,TerritoryTatoo,
+                       TerritoryDolphin,TerritoryCalmar,TerritoryShark,TerritoryBonobo,
+                       TerritoryDragon,TerritoryHydra,TerritoryLicorne,TerritoryMinothaure)
 from player import Player,Animal
 import numpy as np
 import random as rd
 import pygame
-
+from log import Log
 from map import MAP
 class CoreManager:
 
     def __init__(self,**kwargs):
         self.players = kwargs["players"] or []
+        self.log = kwargs["log"]
         ##self.players.append(Player(**{"name":"Arnaud","id":0}))
         ##self.players.append(Player(**{"name":"Aurélien","id":1}))
-        self.am = AttackManager()
+        self.am = AttackManager(self.log)
         self.tm = TerritoryManager()
         self.INIT(**kwargs)
         for p in self.players:
@@ -42,6 +45,7 @@ class CoreManager:
         para = kwargs.get("para") or 0
         if(territory is None):
             print("No territory to deploy")
+            self.log.Log("No territory to deploy")
             return
 
         price = {"field": 1000,"navy":1500,"para":2000}
@@ -51,7 +55,8 @@ class CoreManager:
         money = t.owner.money
         if(cost > money):
             
-            print("Attempted to buy to many troop")
+            print("Attempted to buy to many troops")
+            self.log.Log("Attemped to buy to many troops")
             return
         self._Deploy(t,field,navy,para)
 
@@ -75,6 +80,7 @@ class CoreManager:
         defender = self.tm.territories[t1]
         if(attacker.owner_id == defender.owner_id):
             print("Tried to attack from ally territories")
+            self.log.Log(f"Tried to attack from ally territories : {t0} and {t1}")
             return
         
         adjacent = self.tm.adjacent[t0,t1]
@@ -82,6 +88,7 @@ class CoreManager:
         way = self.tm.adjacent[t0,t1]
         if(not attacker.CanBattle(way)):
             print("Territory has no troop to attack")
+            self.log.Log(f"Territory {t0} has no troop to attck {t1} by this way : {way}")
             return
         self._Attack(attacker,defender,way)
         return
@@ -108,6 +115,7 @@ class CoreManager:
             self._Transfer(t0,t1,field,navy,para)
         else:
             print("Transfer was not possible ?")
+            self.log.Log(f"Transfer on territory {t0} to {t1} was not possible.")
         return
 
 
@@ -128,6 +136,7 @@ class CoreManager:
         money = p.money
         if(cost > money):
             print("Attempted to buy to discard card while not enough money")
+            self.log.Log(f"Player {player} attempted to buy discaerd card with not enough money")
             return
         self._DiscardCard(player)
 
@@ -180,38 +189,56 @@ class CoreManager:
             t.append(terr)"""
         
         t.append(Territory(**{"name": "Jungle 0","id":0 ,"animals":animals}))
-        t.append(TerritoryLama(**{"name": "Jungle 1","id":1 ,"animals":animals}))
+        t.append(TerritoryLama(**{"name": "Territoire des Cactus Géants","id":1 ,"animals":animals}))
         t.append(TerritoryMultiple(**{"name": "Jungle 2","id":2 ,"animals":animals}))
-        t.append(TerritoryCard(**{"name": "Jungle 3","id":3 ,"animals":animals}))
-        t.append(TerritoryGorilla(**{"name": "Jungle 4","id":4 ,"animals":animals}))
-        t.append(TerritoryAlpaga(**{"name": "Jungle 5","id":5 ,"animals":animals}))
-        t.append(TerritoryCoati(**{"name": "Jungle 6","id":6 ,"animals":animals}))
-        t.append(TerritoryYack(**{"name": "Jungle 7","id":7 ,"animals":animals}))
-        t.append(TerritoryElephant(**{"name": "Jungle 8","id":8 ,"animals":animals}))
-        t.append(TerritoryZebra(**{"name": "Jungle 9","id":9 ,"animals":animals}))
-        t.append(TerritoryAlbatros(**{"name": "Jungle 10","id":10 ,"animals":animals,"tm":self.tm}))
-        t.append(TerritoryTapir(**{"name": "Jungle 11","id":11 ,"animals":animals}))
-        t.append(TerritoryPenguin(**{"name": "Jungle 12","id":12 ,"animals":animals}))
-        t.append(TerritoryTaipan(**{"name": "Jungle 13","id":13 ,"animals":animals}))
-        t.append(TerritoryCoq(**{"name": "Jungle 14","id":14 ,"animals":animals}))
-        t.append(TerritoryPanthera(**{"name": "Jungle 15","id":15 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryCard(**{"name": "Territoire de la Nuit Sans Fin","id":3 ,"animals":animals}))
+        t.append(TerritoryGorilla(**{"name": "Territoire de la Jungle Sauvage","id":4 ,"animals":animals}))
+        t.append(TerritoryAlpaga(**{"name": "Territoire du Vaste Salar","id":5 ,"animals":animals}))
+        t.append(TerritoryCoati(**{"name": "Territoire des Forets Luxuriantes","id":6 ,"animals":animals}))
+        t.append(TerritoryYack(**{"name": "Territoire des Collines Verdoyantes","id":7 ,"animals":animals}))
+        t.append(TerritoryElephant(**{"name": "Territoire des Volcans Etincelants","id":8 ,"animals":animals}))
+        t.append(TerritoryZebra(**{"name": "Territoire Béni des Dieux","id":9 ,"animals":animals}))
+        t.append(TerritoryAlbatros(**{"name": "Territoire des Cimes de l'Est","id":10 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryTapir(**{"name": "Territoires des Ruines Abandonées","id":11 ,"animals":animals}))
+        t.append(TerritoryPenguin(**{"name": "Territoires des Aurores Boréales","id":12 ,"animals":animals}))
+        t.append(TerritoryTaipan(**{"name": "Territoires du Désert Brulant","id":13 ,"animals":animals}))
+        t.append(TerritoryCoq(**{"name": "Territoire Fleuri","id":14 ,"animals":animals}))
+        t.append(TerritoryPanthera(**{"name": "Territoire de la Brousse Aride","id":15 ,"animals":animals,"tm":self.tm}))
         t.append(Territory(**{"name": "Jungle 16","id":16 ,"animals":animals}))
-        t.append(TerritoryEagle(**{"name": "Jungle 17","id":17 ,"animals":animals,"tm":self.tm}))
-        t.append(Territory(**{"name": "Jungle 18","id":18 ,"animals":animals}))
-        t.append(Territory(**{"name": "Jungle 19","id":19 ,"animals":animals}))
-        t.append(TerritoryChacal(**{"name": "Jungle 20","id":20 ,"animals":animals}))
-        t.append(TerritoryPelican(**{"name": "Jungle 21","id":21 ,"animals":animals,"tm":self.tm}))
-        t.append(TerritoryParesseux(**{"name": "Jungle 22","id":22 ,"animals":animals}))
+        t.append(TerritoryEagle(**{"name": "Territoire des Sommets Pointus","id":17 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryShark(**{"name": "Territoires des Iles Lointaines","id":18 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryDolphin(**{"name": "Territoires de la Mer Déchainée","id":19 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryChacal(**{"name": "Territories des Catacombes","id":20 ,"animals":animals}))
+        t.append(TerritoryPelican(**{"name": "Territoires des Tempêtes","id":21 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryParesseux(**{"name": "Territoire de la Jungle Perdue","id":22 ,"animals":animals}))
 
-        for i in range(23,28):
+        t.append(TerritoryCalmar(**{"name": "Territoires des Navires Echoués","id":23 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryBonobo(**{"name": "Territoire à la myriade d'Etoiles Filantes","id":24 ,"animals":animals,"tm":self.tm}))
+        for i in range(25,26):
             t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
+
+        t.append(TerritoryTatoo(**{"name": "Jungle 26","id":26 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryTurtle(**{"name": "Jungle 27","id":27 ,"animals":animals,"tm":self.tm}))
 
         t.append(TerritoryJaguar(**{"name": "Jungle 28","id":28 ,"animals":animals,"tm":self.tm}))
-        t.append(TerritoryLion(**{"name": "Jungle 15","id":29 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryLion(**{"name": "Jungle 29","id":29 ,"animals":animals,"tm":self.tm}))
 
-        for i in range(30,32):
+
+        t.append(Territory(**{"name": f"Jungle 30","id":30 ,"animals":animals}))
+        t.append(TerritoryPangolin(**{"name": "Jungle 31","id":31 ,"animals":animals,"tm":self.tm}))
+
+        for i in range(32,34):
             t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
         ##t = kwargs["territories"]
+            
+        t.append(TerritoryHydra(**{"name": "Territoires des Marécage Brumeux","id":34 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryMinothaure(**{"name": "Territoires du Labyrinthe Perdu","id":35 ,"animals":animals,"tm":self.tm}))
+        t.append(Territory(**{"name": "Territoires des Tempêtes Nocturnes","id":36 ,"animals":animals})) 
+        t.append(TerritoryLicorne(**{"name": "Territoires de la Foret Argentée","id":37 ,"animals":animals,"tm":self.tm}))
+        t.append(Territory(**{"name": "Territoires des Tempêtes du Matin","id":38 ,"animals":animals}))
+        t.append(TerritoryDragon(**{"name": "Territoires des Grottes Flamboyantes","id":39 ,"animals":animals,"tm":self.tm}))
+        for i in range(40,46):
+            t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
         nbterritory = len(t)
         nbPlayer = len(self.players)
         territoryPerPlayer = nbterritory//nbPlayer
@@ -235,7 +262,7 @@ class CoreManager:
                 t[i].owner = animals
                 t[i].owner_id = -1
                 t[i].owner_name = "animals"
-                t[i].troop = {"field":0,"navy":0,"para":0,"animals":self.maxAnimals}
+                t[i].troop = {"field":0,"navy":0,"para":0,"animals":t[i].maxAnimals}
 
         self.tm = TerritoryManager(territories = t)
 
@@ -244,9 +271,20 @@ class CoreManager:
         t[10].tm = self.tm
         t[15].tm = self.tm
         t[17].tm = self.tm
+        t[18].tm = self.tm
+        t[19].tm = self.tm
+        t[23].tm = self.tm
         t[21].tm = self.tm
+        t[26].tm = self.tm        
         t[27].tm = self.tm
         t[28].tm = self.tm
+        t[29].tm = self.tm
+        t[31].tm = self.tm
+
+        t[34].tm = self.tm
+        t[35].tm = self.tm
+        t[37].tm = self.tm
+        t[39].tm = self.tm
 
         self.tm.adjacent = MAP
             
@@ -268,12 +306,14 @@ class CoreManager:
         for action in filter(lambda act: (act.name in ["Deploy","Transfer","DiscardCard"]),self.actions):
             print("Executing the following action :")
             action.print()
+            self.log.Log(f"Executing action {action.name} : {action.args}")
             func = action_dict.get(action.name)
             func(**action.args)
 
         for action in filter(lambda act: (act.name in ["Attack"]),self.actions):
             print("Executing the following action :")
             action.print()
+            self.log.Log(f"Executing action {action.name} : {action.args}")   
             func = action_dict.get(action.name)
             func(**action.args)
         self.actions = []

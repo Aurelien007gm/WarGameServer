@@ -2,12 +2,14 @@ from coremanager import CoreManager
 from bot import Bot, CleverBot
 from action import Action
 from player import Player
+from log import Log
 
 # Main instance of a game
 class Game:
     def __init__(self, players_json):
         name = [p.get('name') for p in players_json]
         is_bot = [p.get('bot') for p in players_json]
+        self.log = Log()
         print(is_bot)
         self.players = []
         self.bots =[]
@@ -22,7 +24,7 @@ class Game:
                 
         
 
-        kwargs = {"players":self.players}
+        kwargs = {"players":self.players,"log":self.log}
         self.cm = CoreManager(**kwargs)
         for bot in self.bots:
             bot.cm = self.cm
@@ -46,7 +48,10 @@ class Game:
         for a in self.cm.actions:
             a.print()
         self.cm.Run()
+
         self.round += 1
+        self.log.CloseRound()
+        self.log.Log(f"Debut du round{self.round}")
 
     def print(self):
         self.cm.print()
@@ -56,6 +61,9 @@ class Game:
     
     def StaticTerritoriesToJson(self):
         return(self.cm.StaticTerritoriesToJson())
+    
+    def LogToJson(self):
+        return(self.log.ToJson())
     
     def Validate(self, p):
         run = self.cm.Validate(p)

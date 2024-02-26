@@ -3,8 +3,9 @@ from territory import Territory
 class AttackManager:
     DEBUG = True
 
-    def __init__(self):
+    def __init__(self,log):
         self.tm = None
+        self.log = log
 
 
     def Wave(self,**kwargs):
@@ -30,8 +31,10 @@ class AttackManager:
         if(DEBUG):
             for card in attackCards:
                 card.print()
+                self.log.Log(f"Carte attaque : {card.attack}")
             print("====")
             for card in defenseCards:
+                self.log.Log(f"Carte defense : {card.defense}")
                 card.print()
 
         for i in range(nbAttack):
@@ -60,10 +63,12 @@ class AttackManager:
         maxIter: int = 100
         iteration = 0
         if(defender.hasbeentaken or attacker.hasbeentaken):
+            self.log.Log("One of the territory has been taken this turn")
             print("One of the territory has been taken this turn")
             return
         
         if(defender.CancelSpecial()):
+            self.log.Log("Attack was canceld due to special effect")
             print("Attack was cancelled")
             return
         while attacker.CanBattle(way,True) and defender.CanBattle(way,False) and iteration  <maxIter:

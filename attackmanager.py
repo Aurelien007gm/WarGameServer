@@ -69,6 +69,7 @@ class AttackManager:
         
         if(defender.CancelSpecial()):
             self.log.Log("Attack was canceld due to special effect")
+            self.log.Info(f"Player {attacker.owner_name} tried to attack {defender.name} from {attacker.name} but attack was canceled")
             print("Attack was cancelled")
             return
         while attacker.CanBattle(way,True) and defender.CanBattle(way,False) and iteration  <maxIter:
@@ -82,11 +83,16 @@ class AttackManager:
             iteration += 1
         
         if not defender.CanBattle(way,False):
+            log_dict = {0:"air",1:"sea",2:"land"}
+            self.log.Info(f"Player {attacker.owner_name} attacked successfully {defender.name} from {attacker.name} by {log_dict[way]}")
             defender.Conquest(**kwargs)
             remaining = kwargs["attackcompo"][kwargs["attackerLoss"]:]
             for r in remaining:
                 attacker.troop[r] -= 1
                 defender.troop[r] +=1
+        else:
+            log_dict = {0:"air",1:"sea",2:"land"}
+            self.log.Info(f"Player {attacker.owner_name} failed an attack on {defender.name} from {attacker.name} by {log_dict[way]}")
             
         
 

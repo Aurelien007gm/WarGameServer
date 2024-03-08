@@ -14,25 +14,31 @@ import random as rd
 import pygame
 from log import Log
 from map import MAP
+from contract import Contract,Stingy,Diaspora,Hold,Sailor,DraftContract
 class CoreManager:
 
     def __init__(self,**kwargs):
+        self.turn = 1
         self.players = kwargs["players"] or []
         self.log = kwargs["log"]
-        ##self.players.append(Player(**{"name":"Arnaud","id":0}))
-        ##self.players.append(Player(**{"name":"Aurélien","id":1}))
         self.am = AttackManager(self.log)
-        self.tm = TerritoryManager()
+        self.tm = TerritoryManager() ## Not the actual tm, should be replace by None ?
+
         self.INIT(**kwargs)
+
+        for p in self.players:
+            p.InitiateGame(**{"tm":self.tm,"cm":self,"log" :self.log})
         for p in self.players:
             self.tm.SetConnectivity(p)
         self.actions = []
         self.am.continent = self.tm.continent
-        self.turn = 1
+ 
 
     def _Deploy(self,t:Territory,field,navy,para):
         owner = t.owner
         t.Deploy(**{"field":field,"navy":navy,"para":para})
+        self.log.Info(f"Player {owner.name} deployed troops on territory {t.name}")
+        owner.UpdateOnDeploy(**{"field":field,"navy":navy,"para":para})
         price = {"field": 1000,"navy":1500,"para":2000}
         owner.AddMoney(-price["field"]*field)
         owner.AddMoney(-price["navy"]*navy)
@@ -99,8 +105,8 @@ class CoreManager:
         The attackant have at least one troop available
         """
 
-        t0 = kwargs.get("t0")
-        t1 = kwargs.get("t1")
+        t0_id = kwargs.get("t0")
+        t1_id = kwargs.get("t1")
         field = kwargs.get("field")
         navy = kwargs.get("navy")
         para = kwargs.get("para")
@@ -109,13 +115,14 @@ class CoreManager:
             way = 1
         if(para> 1):
             way = 0
-        kwargs = {"t0":t0,"t1":t1,"way":way,"compo":{"field":field,"navy":navy,"para":para}}
+        kwargs = {"t0":t0_id,"t1":t1_id,"way":way,"compo":{"field":field,"navy":navy,"para":para}}
         possible = self.tm.TransferPossible(**kwargs)
         if(possible):
-            self._Transfer(t0,t1,field,navy,para)
+            self.log.Info(f"Player {self.tm.territories[t0_id].owner_name} transfered troop from {self.tm.territories[t0_id].name} to {self.tm.territories[t1_id].name}")
+            self._Transfer(t0_id,t1_id,field,navy,para)
         else:
             print("Transfer was not possible ?")
-            self.log.Log(f"Transfer on territory {t0} to {t1} was not possible.")
+            self.log.Log(f"Transfer on territory {t0_id} to {t1_id} was not possible.")
         return
 
 
@@ -139,6 +146,14 @@ class CoreManager:
             self.log.Log(f"Player {player} attempted to buy discaerd card with not enough money")
             return
         self._DiscardCard(player)
+
+    def SetContract(self,**kwargs):
+        player_id = kwargs.get("player_id")
+        player = self.players[player_id]
+        player.SetContract(**kwargs)
+
+
+
 
     def EndTurn(self):
         for t in self.tm.territories:
@@ -255,14 +270,19 @@ class CoreManager:
         rd.shuffle(owners)
         for i in range(nbterritory):
             if(owners[i]) >= 0:
-                t[i].owner_id = owners[i]
-                t[i].owner = self.players[owners[i]]
+                ##t[i].owner_id = owners[i]
+                ##t[i].owner = self.players[owners[i]]
+                t[i].SetOwner(self.players[owners[i]])
                 t[i].troop["field"] = 2
             else:
                 t[i].owner = animals
                 t[i].owner_id = -1
                 t[i].owner_name = "animals"
                 t[i].troop = {"field":0,"navy":0,"para":0,"animals":t[i].maxAnimals}
+
+        
+        for terr in t:
+            terr.log = self.log
 
         self.tm = TerritoryManager(territories = t)
 
@@ -286,6 +306,7 @@ class CoreManager:
         t[37].tm = self.tm
         t[39].tm = self.tm
 
+
         self.tm.adjacent = MAP
             
 
@@ -302,7 +323,13 @@ class CoreManager:
     def Run(self):
         rd.shuffle(self.actions)
         self.actions.sort(key = lambda t:t.value)
-        action_dict = {"Attack":self.Attack,"Deploy":self.Deploy,"Transfer":self.Transfer,"DiscardCard":self.DiscardCard}
+        action_dict = {"Attack":self.Attack,"Deploy":self.Deploy,"Transfer":self.Transfer,"DiscardCard":self.DiscardCard,"SetContract":self.SetContract}
+        for action in filter(lambda act: (act.name in ["SetContract"]),self.actions):
+            print("Executing the following action :")
+            action.print()
+            self.log.Log(f"Executing action {action.name} : {action.args}")
+            func = action_dict.get(action.name)
+            func(**action.args)
         for action in filter(lambda act: (act.name in ["Deploy","Transfer","DiscardCard"]),self.actions):
             print("Executing the following action :")
             action.print()
@@ -334,8 +361,10 @@ class CoreManager:
         res = self.tm.ToJson()
         res["turn"] = self.turn
         res["players"] = []
+        res["contracts"] = []
         for player in self.players:
             res["players"].append(player.ToJson())
+       
         return(res)
     
     def StaticTerritoriesToJson(self):

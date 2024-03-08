@@ -7,9 +7,9 @@ class Continent :
         self.tm = kwargs.get("tm")
 
     def ComputeInverse(self):
-        for continent, territories in self.continent.items():
-            for t in territories:
-                self.continent_inverse[t] = continent
+        for continent_id, territories_ids in self.continent.items():
+            for t in territories_ids:
+                self.continent_inverse[t] = continent_id
 
 
     def Reward(self):

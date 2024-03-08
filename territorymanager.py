@@ -57,29 +57,29 @@ class TerritoryManager:
         self.connectivity[player] = self.ComputeConnectedMatrix(player)
 
     def TransferPossible(self,**kwargs):
-        t0:int = kwargs["t0"]
-        t1:int = kwargs["t1"]
+        t0_id:int = kwargs["t0"]
+        t1_id:int = kwargs["t1"]
         way:int = kwargs["way"]
         compo = kwargs["compo"]
         res = True
-        if(self.territories[t0].owner != self.territories[t1].owner):
+        if(self.territories[t0_id].owner != self.territories[t1_id].owner):
             res = False
         else:
-            player = self.territories[t0].owner
-            w = self.connectivity[player][t0][t1]
+            player = self.territories[t0_id].owner
+            w = self.connectivity[player][t0_id][t1_id]
             res = (w >= way)
 
         for key,value in compo.items():
-            if(self.territories[t0].troop[key]< value):
+            if(self.territories[t0_id].troop[key]< value):
                 res = False
 
         return(res)
     
     
-    def Transfer(self,t0,t1,compo):
+    def Transfer(self,t0_id,t1_id,compo):
         for key,value in compo.items():
-            self.territories[t0].troop[key] -= value
-            self.territories[t1].troop[key] += value
+            self.territories[t0_id].troop[key] -= value
+            self.territories[t1_id].troop[key] += value
 
     def Add(self,t,compo):
         for key,value in compo.items():

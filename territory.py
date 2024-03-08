@@ -1,6 +1,7 @@
 from card import Card
 from player import Player,Animal
 import random as rd
+from log import Log
 class Territory:
 
 
@@ -11,7 +12,7 @@ class Territory:
         self.animals = kwargs.get("animals")
         self.owner = None
         self.owner_id =-1 # -1 is for animals
-        self.owner_name="None"
+        self.owner_name="None..."
         self.troop = {"field":0,"navy":0,"para":0,"animals":0}
         self.value = kwargs.get("value") or 500
         self.hasbeentaken = False
@@ -30,6 +31,8 @@ class Territory:
         self.eventReward = 5000
         self.eventCountdown = 0
         self.eventOn = False
+
+        self.log = Log()
 
     
     def SetMaxTroop(self, hasContinent = False):
@@ -135,11 +138,13 @@ class Territory:
             self.eventCountdown -=1
             if(self.eventCountdown <= 0):
                 print(f"player {self.owner_name} received a reward for event")
+                self.log.Info(f"player {self.owner_name} received a reward for event on {self.name}")
                 self.owner.AddMoney(self.eventReward)
                 self.eventOn = False
 
         elif(rd.random() < self.eventProb):
             print("Event on territory" + self.name)
+            self.log.Info(f"Event on {self.name}")
             self.eventOn = True
             self.eventCountdown = rd.randint(2,4)
         
@@ -159,6 +164,7 @@ class Territory:
 
     def Uprise(self):
         print("Uprise of the animals on territory" + self.name)
+        self.log.Info(f"Uprise of the animals on {self.name}")
         self.owner = self.animals
         self.owner_id = -1
         self.owner_name = "animals"
@@ -590,7 +596,7 @@ class TerritoryLicorne(Territory):
     def EndTurn(self):
         
         nb = self.tm.CountMythical(self.owner_id)
-        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        reward = {0:0,1:1.0,2:1.2,3:1.5,4:2}
         self.value = int(reward[nb]*500)
         super().EndTurn()
 
@@ -604,7 +610,7 @@ class TerritoryDragon(Territory):
     def EndTurn(self):
         
         nb = self.tm.CountMythical(self.owner_id)
-        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        reward = {0:0,1:1.0,2:1.2,3:1.5,4:2}
         self.value = int(reward[nb]*500)
         super().EndTurn()
 
@@ -618,7 +624,7 @@ class TerritoryMinothaure(Territory):
     def EndTurn(self):
         
         nb = self.tm.CountMythical(self.owner_id)
-        reward = {1:1.0,2:1.1,3:1.5,4:2}
+        reward = {0:0,1:1.0,2:1.2,3:1.5,4:2}
         self.value = int(reward[nb]*500)
         super().EndTurn()
 

@@ -8,6 +8,7 @@ class Territory:
 
     def __init__(self,**kwargs):
         self.name = kwargs.get("name") or "Plaine des abysses"
+        self.tm = kwargs.get("tm") or None
         self.id = kwargs.get("id") or 0
         self.animals = kwargs.get("animals")
         self.owner = None
@@ -419,6 +420,7 @@ class TerritoryEagle(Territory):
         have_bird = self.tm.HaveBird(self.owner_id)
         if(have_bird and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(para = 1)
+        super().EndTurn()
 
 
 class TerritoryAlbatros(Territory):
@@ -433,6 +435,7 @@ class TerritoryAlbatros(Territory):
         have_bird = self.tm.HaveBird(self.owner_id)
         if(have_bird and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(para = 1)
+        super().EndTurn()
 
 class TerritoryPelican(Territory):
 
@@ -446,6 +449,7 @@ class TerritoryPelican(Territory):
         have_bird = self.tm.HaveBird(self.owner_id)
         if(have_bird and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(para = 1)
+        super().EndTurn()
 
 
 class TerritoryShark(Territory):
@@ -460,6 +464,7 @@ class TerritoryShark(Territory):
         have_fish= self.tm.HaveFish(self.owner_id)
         if(have_fish and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(navy = 1)
+        super().EndTurn()
 
 class TerritoryDolphin(Territory):
 
@@ -473,6 +478,7 @@ class TerritoryDolphin(Territory):
         have_fish= self.tm.HaveFish(self.owner_id)
         if(have_fish and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(navy = 1)
+        super().EndTurn()
 
 class TerritoryCalmar(Territory):
 
@@ -486,7 +492,7 @@ class TerritoryCalmar(Territory):
         have_fish= self.tm.HaveFish(self.owner_id)
         if(have_fish and rd.random()>0.5 and self.owner_id >=0):
             self.Deploy(navy = 1)
-
+        super().EndTurn()
 
 class TerritoryLion(Territory):
 

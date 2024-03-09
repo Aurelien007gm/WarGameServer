@@ -128,8 +128,8 @@ class Player:
         tm = self.tm
         log = self.log
         kwargs = {"cm":cm,"tm":tm,"player":self,"arg": arg,"log":self.log}
-        contract_construct = {"Sailor": Sailor,"MasterSeaAir":MasterSeaAir,"Diaspora":Diaspora,"Aviator":Aviator,
-                              "Diapora II":DiasporaMedium,"Diaspora III":DiasporaHard,"Hold":Hold}
+        contract_construct = {"Sailor": Sailor,"MasterSeaAir":MasterSeaAir,"Diaspora I":Diaspora,"Aviator":Aviator,
+                              "Diaspora II":DiasporaMedium,"Diaspora III":DiasporaHard,"Hold":Hold}
         self.contract = contract_construct[contract_name](**kwargs)
 
 

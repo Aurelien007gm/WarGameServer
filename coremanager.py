@@ -288,23 +288,8 @@ class CoreManager:
 
 
         # Should be removed and have better logic
-        t[10].tm = self.tm
-        t[15].tm = self.tm
-        t[17].tm = self.tm
-        t[18].tm = self.tm
-        t[19].tm = self.tm
-        t[23].tm = self.tm
-        t[21].tm = self.tm
-        t[26].tm = self.tm        
-        t[27].tm = self.tm
-        t[28].tm = self.tm
-        t[29].tm = self.tm
-        t[31].tm = self.tm
-
-        t[34].tm = self.tm
-        t[35].tm = self.tm
-        t[37].tm = self.tm
-        t[39].tm = self.tm
+        for i in range(45):
+            t[i].tm = self.tm
 
 
         self.tm.adjacent = MAP

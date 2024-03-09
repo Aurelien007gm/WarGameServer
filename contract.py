@@ -283,27 +283,27 @@ class DraftContract:
 
         if(contract_name == "Diaspora I"):
             self.name = "Diaspora I"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4 
             self.description = f"Have at least one territory on each continent at the end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Diaspora II"):
             self.name = "Diaspora II"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4
             self.description = f"Have at least two territories on each continent at the end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Diaspora III"):
             self.name = "Diaspora III"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4
             self.description = f"Have at least three territories on each continent at the end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Hold"):
             self.name = "Hold"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4
             N = 46
-            self.arg= rd.randint(0,N) 
+            self.arg= rd.randint(0,N-1) 
             self.territory = self.tm.territories[self.arg]
             self.description = f"Hold territory {self.territory.name} at the end of turn {self.expiration}"
 
@@ -311,20 +311,20 @@ class DraftContract:
 
         if(contract_name == "Sailor"):
             self.name = "Sailor"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4
             self.description = f"Deploy at least 5 navy troop before turn {self.expiration}"
             self.arg = None
 
 
         if(contract_name == "Aviator"):
             self.name = "Aviator"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4
             self.description = f"Deploy at least 8 navy troop before turn {self.expiration}"
             self.arg = None
         
         if(contract_name == "MasterSeaAir"):
             self.name = "MasterSeaAir"
-            self.expiration = turn + 4
+            self.expiration = turn-1 + 4
             self.description = f"Deploy at least 10 navy troop and 10 para troop before end of turn {self.expiration}"
             self.arg = None
 

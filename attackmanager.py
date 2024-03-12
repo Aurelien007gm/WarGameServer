@@ -85,6 +85,7 @@ class AttackManager:
         if not defender.CanBattle(way,False):
             log_dict = {0:"air",1:"sea",2:"land"}
             self.log.Info(f"Player {attacker.owner_name} attacked successfully {defender.name} from {attacker.name} by {log_dict[way]}")
+            attacker.owner.UpdateConquestCount()
             defender.Conquest(**kwargs)
             remaining = kwargs["attackcompo"][kwargs["attackerLoss"]:]
             for r in remaining:

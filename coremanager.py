@@ -7,7 +7,8 @@ from territory import (Territory,TerritoryMultiple,TerritoryCard,TerritoryElepha
                        TerritoryTapir,TerritoryZebra,TerritoryEagle,TerritoryPelican,TerritoryAlbatros,
                        TerritoryLion,TerritoryPanthera,TerritoryJaguar,TerritoryTurtle,TerritoryPangolin,TerritoryTatoo,
                        TerritoryDolphin,TerritoryCalmar,TerritoryShark,TerritoryBonobo,
-                       TerritoryDragon,TerritoryHydra,TerritoryLicorne,TerritoryMinothaure)
+                       TerritoryDragon,TerritoryHydra,TerritoryLicorne,TerritoryMinothaure,TerritoryDremadory,TerritoryWolf,
+                       TerritoryFrog, TerritorySwan)
 from player import Player,Animal
 import numpy as np
 import random as rd
@@ -232,28 +233,36 @@ class CoreManager:
         for i in range(25,26):
             t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
 
-        t.append(TerritoryTatoo(**{"name": "Jungle 26","id":26 ,"animals":animals,"tm":self.tm}))
-        t.append(TerritoryTurtle(**{"name": "Jungle 27","id":27 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryTatoo(**{"name": "Territoires de la Falaise Calcaire","id":26 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryTurtle(**{"name": "Territoire de la Plage de Darwin","id":27 ,"animals":animals,"tm":self.tm}))
 
-        t.append(TerritoryJaguar(**{"name": "Jungle 28","id":28 ,"animals":animals,"tm":self.tm}))
-        t.append(TerritoryLion(**{"name": "Jungle 29","id":29 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryJaguar(**{"name": "Territoire de la Foret Primaire","id":28 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritoryLion(**{"name": "Territoire de la Grande Savane","id":29 ,"animals":animals,"tm":self.tm}))
 
 
-        t.append(Territory(**{"name": f"Jungle 30","id":30 ,"animals":animals}))
-        t.append(TerritoryPangolin(**{"name": "Jungle 31","id":31 ,"animals":animals,"tm":self.tm}))
+        t.append(Territory(**{"name": f"Territoires des Plaines Monotones","id":30 ,"animals":animals}))
+        t.append(TerritoryPangolin(**{"name": "Terriotires des Grottes Escarpées","id":31 ,"animals":animals,"tm":self.tm}))
+        ##t.append(TerritoryGlutton(**{"name": "Territoire de la la météo lunatique","id":32 ,"animals":animals,"tm":self.tm}))
+        t.append(Territory(**{"name": "Territoire des nuages appaisants","id":32 ,"animals":animals,"tm":self.tm}))
 
-        for i in range(32,34):
+        for i in range(33,34):
             t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
         ##t = kwargs["territories"]
             
         t.append(TerritoryHydra(**{"name": "Territoires des Marécage Brumeux","id":34 ,"animals":animals,"tm":self.tm}))
         t.append(TerritoryMinothaure(**{"name": "Territoires du Labyrinthe Perdu","id":35 ,"animals":animals,"tm":self.tm}))
-        t.append(Territory(**{"name": "Territoires des Tempêtes Nocturnes","id":36 ,"animals":animals})) 
+        t.append(TerritoryDremadory(**{"name": "Territoires des Canyons Serpentants","id":36 ,"animals":animals,"tm":self.tm}))
         t.append(TerritoryLicorne(**{"name": "Territoires de la Foret Argentée","id":37 ,"animals":animals,"tm":self.tm}))
         t.append(Territory(**{"name": "Territoires des Tempêtes du Matin","id":38 ,"animals":animals}))
         t.append(TerritoryDragon(**{"name": "Territoires des Grottes Flamboyantes","id":39 ,"animals":animals,"tm":self.tm}))
-        for i in range(40,46):
+        t.append(TerritoryFrog(**{"name": "Territoires des Marais Mauves","id":40 ,"animals":animals,"tm":self.tm}))
+        t.append(TerritorySwan(**{"name": "Territoires du Lac Majesteux","id":41 ,"animals":animals,"tm":self.tm}))
+        for i in range(42,43):
             t.append(Territory(**{"name": f"Jungle {i}","id":i ,"animals":animals}))
+
+        t.append(Territory(**{"name": "Jungle 43","id":43 ,"animals":animals}))
+        t.append(Territory(**{"name": f"Jungle 44","id":44 ,"animals":animals}))
+        t.append(TerritoryWolf(**{"name": "Territoires de la Météo Lunatique","id":45 ,"animals":animals,"tm":self.tm}))
         nbterritory = len(t)
         nbPlayer = len(self.players)
         territoryPerPlayer = nbterritory//nbPlayer

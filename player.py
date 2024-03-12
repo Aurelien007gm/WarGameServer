@@ -1,11 +1,12 @@
 import random as rd
 from card import Card
-from contract import Contract,Stingy,Diaspora,DiasporaMedium,DiasporaHard,Hold,Sailor,DraftContract,MasterSeaAir,Aviator
+from contract import (Contract,Stingy,Diaspora,DiasporaMedium,DiasporaHard,
+                      Hold,Sailor,DraftContract,MasterSeaAir,Aviator,Warrior,WarriorMedium,WarriorHard)
 from log import Log
 class Player:
 
     def __init__(self,**kwargs):
-        self.money = 5000
+        self.money = 10000
         self.name = kwargs.get("name") or "Unknown"
         self.id = kwargs.get("id") or 0
         self.tm = None
@@ -18,6 +19,8 @@ class Player:
         self.log = kwargs.get("log") or Log()
         self.ready = self.isbot
         self.contracts_drawn = []
+
+        self.territory_conquered = 0 # Number of terriotry conquested this turn
  
         for i in range(10):
             self.cards.append(Card())
@@ -64,11 +67,13 @@ class Player:
         return(card)
     
     def EndTurn(self):
+
         if self.contract:
             self.contract.Print()
             self.contract.EndTurn()
         if (self.contract):
             self.contract = self.contract if not self.contract.CheckDelete() else None
+        self.territory_conquered = 0
 
         self.DrawDraftContract()
 
@@ -89,15 +94,21 @@ class Player:
         contracts_easy.append(DraftContract(**{"contract_name":"Diaspora I","turn":turn}))
         contracts_easy.append(DraftContract(**{"contract_name":"Sailor","turn":turn}))
         contracts_easy.append(DraftContract(**{"contract_name":"Hold","turn":turn,"tm":self.tm}))
+        contracts_easy.append(DraftContract(**{"contract_name":"Warrior I","turn":turn}))
 
         contracts_medium = []
         contracts_medium.append(DraftContract(**{"contract_name":"Aviator","turn":turn}))
         contracts_medium.append(DraftContract(**{"contract_name":"Diaspora II","turn":turn}))
+        contracts_easy.append(DraftContract(**{"contract_name":"Warrior II","turn":turn}))
         
         contracts_hard = []
         contracts_hard.append(DraftContract(**{"contract_name":"MasterSeaAir","turn":turn}))
         contracts_hard.append(DraftContract(**{"contract_name":"Diaspora III","turn":turn}))
+        contracts_easy.append(DraftContract(**{"contract_name":"Warrior III","turn":turn}))
         self.contracts_drawn = [rd.choice(contracts_easy),rd.choice(contracts_medium),rd.choice(contracts_hard)]
+
+    def UpdateConquestCount(self):
+        self.territory_conquered += 1
 
 
     def ToJson(self):
@@ -129,7 +140,8 @@ class Player:
         log = self.log
         kwargs = {"cm":cm,"tm":tm,"player":self,"arg": arg,"log":self.log}
         contract_construct = {"Sailor": Sailor,"MasterSeaAir":MasterSeaAir,"Diaspora I":Diaspora,"Aviator":Aviator,
-                              "Diaspora II":DiasporaMedium,"Diaspora III":DiasporaHard,"Hold":Hold}
+                              "Diaspora II":DiasporaMedium,"Diaspora III":DiasporaHard,"Hold":Hold,
+                              "Warrior I":Warrior,"Warrior II":WarriorMedium,"WarriorIII": WarriorHard}
         self.contract = contract_construct[contract_name](**kwargs)
 
 

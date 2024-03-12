@@ -648,4 +648,59 @@ class TerritoryHydra(Territory):
         self.value = int(reward[nb]*500)
         super().EndTurn()
 
+class TerritoryGlutton(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Randomly gain or lose between 1 and 3 troops each tuurn"
+
+    def EndTurn(self):
+        super().EndTurn()
+
+class TerritoryDremadory(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Reward for this terriotry is 250 per adjacent erritory you own"
+
+    def EndTurn(self):
+        adjacent = [35,43,44,37]
+        count = self.tm.CountAdjacent(self.owner_id,adjacent)
+        self.value = 250*count
+        super().EndTurn()
+
+class TerritoryWolf(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.tm = kwargs["tm"]
+        self.effect ="Attack with one more card, defend with one less card"
+        self.baseMaxTroopAttack = 4
+        self.baseMaxTroopDefense = 1
+
+class TerritoryFrog(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.effect ="At the end of each turn, upgrade one field troop into a navy troop."
+
+    def EndTurn(self):
+        if(self.troop["field"] >= 1):
+            self.troop["field"] -= 1
+            self.troop["navy"] += 1
+        super().EndTurn()
+
+class TerritorySwan(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.effect ="At the end of each turn, upgrade one navy troop into a para troop."
+
+    def EndTurn(self):
+        if(self.troop["navy"] >= 1):
+            self.troop["navy"] -= 1
+            self.troop["para"] += 1
+        super().EndTurn()
 

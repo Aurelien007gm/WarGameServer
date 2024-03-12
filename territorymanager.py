@@ -147,6 +147,18 @@ class TerritoryManager:
                 res += 1
 
         return(res)
+    
+    def CountAdjacent(self,player_id,adjacent_ids):
+        #Count adjacent territories owned by player
+
+        
+        count = 0
+        for territory_id in adjacent_ids:
+            if (player_id == self.territories[territory_id].owner_id):
+                count += 1
+
+        return(count)
+
 
     
 

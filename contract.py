@@ -13,7 +13,8 @@ class Contract:
         self.gage = -200
         self.tm = kwargs.get("tm")
         self.cm = kwargs.get("cm")
-        self.expiration = self.cm.turn + self.countdown
+        self.expiration = self.cm.turn + self.countdown -1 # correct ? I don't know why this work
+
         self.log = kwargs.get("log")
     
     def SetPlayer(self,p):
@@ -86,11 +87,11 @@ class Hold(Contract):
         self.territory = self.tm.territories[self.territory_id]
         self.description = f"Hold territory {self.territory.name} at the end of turn {self.expiration}"
 
-    def IsSucess(self):
+    def IsSuccess(self):
         return(self.territory.owner_id == self.player.id)
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 
@@ -107,7 +108,7 @@ class Sailor(Contract):
         self.deployed = 0
         self.target = 5
 
-    def IsSucess(self):
+    def IsSuccess(self):
         return(self.deployed >= self.target)
     
     def UpdateOnDeploy(self,**kwargs):
@@ -115,7 +116,7 @@ class Sailor(Contract):
         self.deployed += navy
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 class Aviator(Contract):
@@ -131,7 +132,7 @@ class Aviator(Contract):
         self.deployed = 0
         self.target = 8
 
-    def IsSucess(self):
+    def IsSuccess(self):
         return(self.deployed >= self.target)
     
     def UpdateOnDeploy(self,**kwargs):
@@ -139,7 +140,7 @@ class Aviator(Contract):
         self.deployed += para
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 class MasterSeaAir(Contract):
@@ -157,7 +158,7 @@ class MasterSeaAir(Contract):
         self.para_deployed = 0
         self.para_target = 10
 
-    def IsSucess(self):
+    def IsSuccess(self):
         return(self.navy_deployed >= self.navy_target and self.para_deployed >= self.para_target)
     
     def UpdateOnDeploy(self,**kwargs):
@@ -167,7 +168,70 @@ class MasterSeaAir(Contract):
         self.para_deployed += para
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
+        super().EndTurn()
+
+class Warrior(Contract):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+
+        self.reward = 2000
+        self.gage = -200
+        self.isSuccess = True
+        self.name = "Warrior I"
+        self.difficulty = "Easy"
+        self.description = f"Conquer at least 3 territories before end of turn {self.expiration}"
+        self.count = 0
+        self.target = 3
+    
+    def IsSuccess(self):
+        return(self.count >= self.target)
+    
+    def EndTurn(self):
+        self.count += self.player.territory_conquered
+        self.isSuccess = self.IsSuccess()
+        super().EndTurn()
+
+class WarriorMedium(Contract):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+
+        self.reward = 5000
+        self.gage = -1500
+        self.isSuccess = True
+        self.name = "Warrior II"
+        self.difficulty = "Medium"
+        self.description = f"Conquer at least 6 territories before end of turn {self.expiration}"
+        self.count = 0
+        self.target = 6
+    
+    def IsSuccess(self):
+        return(self.count >= self.target)
+    
+    def EndTurn(self):
+        self.count += self.player.territory_conquered
+        self.isSuccess = self.IsSuccess()
+        super().EndTurn()
+
+class WarriorHard(Contract):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+
+        self.reward = 10000
+        self.gage = -5000
+        self.isSuccess = True
+        self.name = "Warrior III"
+        self.difficulty = "Hard"
+        self.description = f"Conquer at least 12 territories before end of turn {self.expiration}"
+        self.count = 0
+        self.target = 12
+    
+    def IsSuccess(self):
+        return(self.count >= self.target)
+    
+    def EndTurn(self):
+        self.count += self.player.territory_conquered
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 class Diaspora(Contract):
@@ -184,7 +248,7 @@ class Diaspora(Contract):
         self.difficulty = "Easy"
         self.description = f"Have at least one territory on each continent at the end of turn {self.expiration}"
 
-    def IsSucess(self):
+    def IsSuccess(self):
         continent_dict = self.tm.continent.continent_inverse
 
         territory_on_continent_count = {}
@@ -201,7 +265,7 @@ class Diaspora(Contract):
         return(res)
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 
@@ -216,7 +280,7 @@ class DiasporaMedium(Contract):
         self.difficulty = "Medium"
         self.description = f"Have at least two territories on each continent on turn {self.expiration}"
 
-    def IsSucess(self):
+    def IsSuccess(self):
         continent_dict = self.tm.continent.continent_inverse
 
         territory_on_continent_count = {}
@@ -233,7 +297,7 @@ class DiasporaMedium(Contract):
         return(res)
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 class DiasporaHard(Contract):
@@ -247,7 +311,7 @@ class DiasporaHard(Contract):
         self.difficulty = "Hard"
         self.description = f"Have at least three territories on each continent on turn {self.expiration}"
 
-    def IsSucess(self):
+    def IsSuccess(self):
         continent_dict = self.tm.continent.continent_inverse
 
         territory_on_continent_count = {}
@@ -264,7 +328,7 @@ class DiasporaHard(Contract):
         return(res)
     
     def EndTurn(self):
-        self.isSuccess = self.IsSucess()
+        self.isSuccess = self.IsSuccess()
         super().EndTurn()
 
 
@@ -279,29 +343,31 @@ class DraftContract:
         self.tm = kwargs.get("tm") or None
 
         turn = kwargs.get("turn") or 0
+        if(turn == 1):
+            turn = 0 # Custom logic to implement the fact contract are drawn at the end of turn except for turn 1
         contract_name = kwargs.get("contract_name") or "Basic contract"
 
         if(contract_name == "Diaspora I"):
             self.name = "Diaspora I"
-            self.expiration = turn-1 + 4 
+            self.expiration = turn + 4 
             self.description = f"Have at least one territory on each continent at the end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Diaspora II"):
             self.name = "Diaspora II"
-            self.expiration = turn-1 + 4
+            self.expiration = turn + 4
             self.description = f"Have at least two territories on each continent at the end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Diaspora III"):
             self.name = "Diaspora III"
-            self.expiration = turn-1 + 4
+            self.expiration = turn + 4
             self.description = f"Have at least three territories on each continent at the end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Hold"):
             self.name = "Hold"
-            self.expiration = turn-1 + 4
+            self.expiration = turn+ 4
             N = 46
             self.arg= rd.randint(0,N-1) 
             self.territory = self.tm.territories[self.arg]
@@ -311,21 +377,39 @@ class DraftContract:
 
         if(contract_name == "Sailor"):
             self.name = "Sailor"
-            self.expiration = turn-1 + 4
+            self.expiration = turn + 4
             self.description = f"Deploy at least 5 navy troop before turn {self.expiration}"
             self.arg = None
 
 
         if(contract_name == "Aviator"):
             self.name = "Aviator"
-            self.expiration = turn-1 + 4
+            self.expiration = turn + 4
             self.description = f"Deploy at least 8 navy troop before turn {self.expiration}"
             self.arg = None
         
         if(contract_name == "MasterSeaAir"):
             self.name = "MasterSeaAir"
-            self.expiration = turn-1 + 4
+            self.expiration = turn + 4
             self.description = f"Deploy at least 10 navy troop and 10 para troop before end of turn {self.expiration}"
+            self.arg = None
+
+        if(contract_name == "Warrior I"):
+            self.name = "Warrior I"
+            self.expiration = turn + 4
+            self.description = f"Conquer at least 3 territoires before end of turn {self.expiration}"
+            self.arg = None
+
+        if(contract_name == "Warrior II"):
+            self.name = "Warrior I"
+            self.expiration = turn + 4
+            self.description = f"Conquer at least 6 territoires before end of turn {self.expiration}"
+            self.arg = None
+
+        if(contract_name == "Warrior III"):
+            self.name = "Warrior I"
+            self.expiration = turn + 4
+            self.description = f"Conquer at least 12 territoires before end of turn {self.expiration}"
             self.arg = None
 
     def ToJson(self):

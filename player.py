@@ -99,12 +99,12 @@ class Player:
         contracts_medium = []
         contracts_medium.append(DraftContract(**{"contract_name":"Aviator","turn":turn}))
         contracts_medium.append(DraftContract(**{"contract_name":"Diaspora II","turn":turn}))
-        contracts_easy.append(DraftContract(**{"contract_name":"Warrior II","turn":turn}))
+        contracts_medium.append(DraftContract(**{"contract_name":"Warrior II","turn":turn}))
         
         contracts_hard = []
         contracts_hard.append(DraftContract(**{"contract_name":"MasterSeaAir","turn":turn}))
         contracts_hard.append(DraftContract(**{"contract_name":"Diaspora III","turn":turn}))
-        contracts_easy.append(DraftContract(**{"contract_name":"Warrior III","turn":turn}))
+        contracts_hard.append(DraftContract(**{"contract_name":"Warrior III","turn":turn}))
         self.contracts_drawn = [rd.choice(contracts_easy),rd.choice(contracts_medium),rd.choice(contracts_hard)]
 
     def UpdateConquestCount(self):

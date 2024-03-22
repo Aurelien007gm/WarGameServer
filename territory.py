@@ -206,7 +206,7 @@ class Territory:
         res["effect"] = self.effect
         return(res)
 
-class TerritoryMultiple(Territory):
+class TerritoryMultiple(Territory): # Animal is castor
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.effect ="Reward is multiplied by 1.05 each turn. Reset when owner changes"
@@ -219,7 +219,7 @@ class TerritoryMultiple(Territory):
         self.value = int(self.value*1.05)
         super().EndTurn()
 
-class TerritoryCard(Territory):
+class TerritoryCard(Territory):  # Animal is bat
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.effect ="Discard the worst card of the owner and draw another card each turn"
@@ -391,23 +391,6 @@ class TerritoryMacaque(Territory):
     def Reward(self):
         return(self.effectiveReward)
     
-class TerritoryMacaque(Territory):
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
-        self.effectiveReward = self.value
-        self.effect ="Reward is double if at least 5 troop at the beginning of the turn"
-
-    def BeforeEnd(self):
-        count = self.CountTroop()
-        if count >= 5:
-            self.effectiveReward = self.value
-        else:
-            self.effectiveReward = 0
-        return
-    
-    def Reward(self):
-        return(self.effectiveReward)
-    
 class TerritoryEagle(Territory):
 
     def __init__(self,**kwargs):
@@ -452,7 +435,7 @@ class TerritoryPelican(Territory):
         super().EndTurn()
 
 
-class TerritoryShark(Territory):
+class TerritoryShark(Territory): # Rename as carp
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -480,7 +463,7 @@ class TerritoryDolphin(Territory):
             self.Deploy(navy = 1)
         super().EndTurn()
 
-class TerritoryCalmar(Territory):
+class TerritoryCalmar(Territory): ## Could be renamed Salmon
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -508,7 +491,7 @@ class TerritoryLion(Territory):
             self.maxTroopAttack += 1 
         return
     
-class TerritoryPanthera(Territory):
+class TerritoryPanthera(Territory):  ## Should be renamed Leopard
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -592,21 +575,7 @@ class TerritoryDragon(Territory):
         self.value = reward[nb]
         super().EndTurn()
 
-class TerritoryLicorne(Territory):
-
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
-        self.tm = kwargs["tm"]
-        self.effect ="The more mythological animals [ dragon, minothaure, hydra, licorne] you own, the more the reward \n 1 : *1 \n 2 : *1.2 \n 3 : *1.5 \n 4 : *2"
-
-    def EndTurn(self):
-        
-        nb = self.tm.CountMythical(self.owner_id)
-        reward = {0:0,1:1.0,2:1.2,3:1.5,4:2}
-        self.value = int(reward[nb]*500)
-        super().EndTurn()
-
-class TerritoryDragon(Territory):
+class TerritoryLicorne(Territory): # Rename as unicorn ?
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -653,7 +622,7 @@ class TerritoryGlutton(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="Randomly gain or lose between 1 and 3 troops each tuurn"
+        self.effect ="Randomly gain or lose between 1 and 3 troops each turn"
 
     def EndTurn(self):
         super().EndTurn()
@@ -663,7 +632,7 @@ class TerritoryDremadory(Territory):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.tm = kwargs["tm"]
-        self.effect ="Reward for this terriotry is 250 per adjacent erritory you own"
+        self.effect ="Reward for this territory is 250 per adjacent territory you own"
 
     def EndTurn(self):
         adjacent = [35,43,44,37]
@@ -704,3 +673,32 @@ class TerritorySwan(Territory):
             self.troop["para"] += 1
         super().EndTurn()
 
+class TerritoryBear(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.effect ="Reward if doubled if there is 3 troops or less on this terriotry, but halved if there is 5 troop or more"
+
+    def BeforeEnd(self):
+        count = self.CountTroop()
+        if count >= 5:
+            self.effectiveReward = int(self.value//2)
+        elif count <= 3:
+            self.effectiveReward = self.value *2
+
+        else:
+            self.effectiveReward = self.value
+        return
+    
+class TerritoryPaon(Territory):
+
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.effect ="Reward is doubled if all kind of troops are present on the territory, and halved otherwise"
+
+    def BeforeEnd(self):
+        if all([self.troop["field"]>= 1,self.troop["navy"]>=1,self.troop["para"]>=1]):
+            self.effectiveReward = self.value *2
+        else:
+            self.effectiveReward = int(self.value //2)
+        return

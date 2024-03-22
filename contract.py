@@ -128,7 +128,7 @@ class Aviator(Contract):
         self.isSuccess = True
         self.name = "Aviator"
         self.difficulty= "Medium"
-        self.description = f"Deploy at least 8 navy troop before turn {self.expiration}"
+        self.description = f"Deploy at least 8 para troop before turn {self.expiration}"
         self.deployed = 0
         self.target = 8
 
@@ -385,7 +385,7 @@ class DraftContract:
         if(contract_name == "Aviator"):
             self.name = "Aviator"
             self.expiration = turn + 4
-            self.description = f"Deploy at least 8 navy troop before turn {self.expiration}"
+            self.description = f"Deploy at least 8 para troop before turn {self.expiration}"
             self.arg = None
         
         if(contract_name == "MasterSeaAir"):
@@ -401,15 +401,39 @@ class DraftContract:
             self.arg = None
 
         if(contract_name == "Warrior II"):
-            self.name = "Warrior I"
+            self.name = "Warrior II"
             self.expiration = turn + 4
             self.description = f"Conquer at least 6 territoires before end of turn {self.expiration}"
             self.arg = None
 
         if(contract_name == "Warrior III"):
-            self.name = "Warrior I"
+            self.name = "Warrior III"
             self.expiration = turn + 4
             self.description = f"Conquer at least 12 territoires before end of turn {self.expiration}"
+            self.arg = None
+
+        if(contract_name == "Hiker"):
+            self.name = "Hiker"
+            self.expiration = turn + 4
+            self.description = f"Own at least 3 territory of the biome Moutain at the end of turn {self.expiration}"
+            self.arg = None
+
+        if(contract_name == "Cactus Expert"):
+            self.name = "Cactus Expert"
+            self.expiration = turn + 4
+            self.description = f"Own at least 3 territory of the biome Cactus"
+            self.arg = None
+
+        if(contract_name == "Volcanologist"):
+            self.name = "Volcanologist"
+            self.expiration = turn + 4
+            self.description = f"Own all the territory of the biome Volcano at the end of turn {self.expiration}"
+            self.arg = None
+
+        if(contract_name == "Fisherman"):
+            self.name = "Fisherman"
+            self.expiration = turn + 2 # Warning on delay !
+            self.description = f"Own at least 6 territories adjacent to a river at the end of turn {self.expiration}."
             self.arg = None
 
     def ToJson(self):
